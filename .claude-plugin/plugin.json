@@ -1,5 +1,6 @@
 {
   "name": "kelviq",
   "description": "Kelviq for Claude: the Kelviq MCP server (45 typed API tools, searchable docs, guided prompts) plus skills that teach Claude the Kelviq monetization workflows — modeling pricing, selling plans, gating features, and managing pricing as code.",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "author": { "name": "Kelviq" }
 }

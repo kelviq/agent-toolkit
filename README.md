@@ -32,6 +32,19 @@ path installs skills only — it does not configure an MCP server for you.
 Each skill's own Setup section covers connecting the Kelviq MCP server on
 your agent.
 
+## The skills
+
+| Skill | Job | Install (single skill) |
+|---|---|---|
+| `kelviq` | Hub: connect any agent, ground rules, concept model, routing | `npx skills add kelviq/agent-toolkit --skill kelviq` |
+| `pricing-plans` | Design the catalog: products, features, plans, entitlements, publish | `npx skills add kelviq/agent-toolkit --skill pricing-plans` |
+| `setup-payments` | Checkout, subscriptions, trials, customer portal, upgrades | `npx skills add kelviq/agent-toolkit --skill setup-payments` |
+| `usage-based-billing` | Entitlement checks, usage reporting, license keys | `npx skills add kelviq/agent-toolkit --skill usage-based-billing` |
+| `pricing-as-code` | The Kelviq CLI: pricing in git, pull → diff → promote | `npx skills add kelviq/agent-toolkit --skill pricing-as-code` |
+
+On Claude Code, `/plugin install kelviq@kelviq` (above) installs all five at
+once, bundled with the MCP server.
+
 ## Environment variables
 
 The bundled MCP server (`@kelviq/mcp-server`, run via `npx -y
