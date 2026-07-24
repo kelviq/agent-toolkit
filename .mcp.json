@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "kelviq": {
+      "command": "npx",
+      "args": ["-y", "@kelviq/mcp-server"],
+      "env": {
+        "KELVIQ_SERVER_API_KEY": "${KELVIQ_SERVER_API_KEY}",
+        "KELVIQ_CLIENT_API_KEY": "${KELVIQ_CLIENT_API_KEY}",
+        "KELVIQ_ENV": "${KELVIQ_ENV}"
+      }
+    }
+  }
+}
