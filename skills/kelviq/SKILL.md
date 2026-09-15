@@ -26,11 +26,11 @@ other agent, or if `kelviq:` tools are unavailable, add it directly:
   "mcpServers": {
     "kelviq": {
       "command": "npx",
-      "args": ["-y", "@kelviq/mcp-server"],
+      "args": ["-y", "@kelviq/mcp-server@latest"],
       "env": {
         "KELVIQ_SERVER_API_KEY": "${KELVIQ_SERVER_API_KEY}",
         "KELVIQ_CLIENT_API_KEY": "${KELVIQ_CLIENT_API_KEY}",
-        "KELVIQ_ENV": "${KELVIQ_ENV}"
+        "KELVIQ_ENV": "sandbox"
       }
     }
   }
@@ -39,11 +39,12 @@ other agent, or if `kelviq:` tools are unavailable, add it directly:
 
 Get keys at `https://app.kelviq.com/settings/api-keys`. `KELVIQ_SERVER_API_KEY`
 covers nearly every tool; `KELVIQ_CLIENT_API_KEY` is only needed for
-`promotion_get`. Set `KELVIQ_ENV=sandbox` (with sandbox keys) to test safely —
-sandbox and production are fully separate: different data, different keys, a
-key only works against its own environment. Leave `KELVIQ_ENV` unset for
-production. The `docs_search` / `docs_read` tools work with no keys at all —
-use them to answer questions before any key is configured.
+`promotion_get`. The server uses **sandbox** unless `KELVIQ_ENV=production` —
+keep it that way while building and testing, and only switch (with production
+keys) when the user explicitly wants live data. Sandbox and production are
+fully separate: different data, different keys, a key only works against its
+own environment. The `docs_search` / `docs_read` tools work with no keys at
+all — use them to answer questions before any key is configured.
 
 ## Ground rules
 

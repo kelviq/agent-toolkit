@@ -48,13 +48,14 @@ once, bundled with the MCP server.
 ## Environment variables
 
 The bundled MCP server (`@kelviq/mcp-server`, run via `npx -y
-@kelviq/mcp-server`) reads these from your environment:
+@kelviq/mcp-server@latest` so every session picks up the newest release)
+reads these from your environment:
 
 | Variable | Purpose |
 |---|---|
 | `KELVIQ_SERVER_API_KEY` | Required for server-scoped API tools (products, plans, customers, checkout, etc.) |
 | `KELVIQ_CLIENT_API_KEY` | Required only for `promotion_get` |
-| `KELVIQ_ENV` | `production` (default) or `sandbox`. Leave unset for production; set to `sandbox` for testing |
+| `KELVIQ_ENV` | `sandbox` (default) or `production`. Leave unset while building and testing; set to `production` only for live data |
 
 Get keys at
 [app.kelviq.com/settings/api-keys](https://app.kelviq.com/settings/api-keys).
