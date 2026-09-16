@@ -80,8 +80,10 @@ identifier, but `plan_create` needs the parent **product UUID**, and
 have an identifier, resolve the UUID first with the matching list/retrieve
 tool (`product_retrieve`, `feature_list`, …).
 
-**Feature types.** `BOOLEAN` is an on/off flag, `CUSTOMIZABLE` is a numeric
-quantity (e.g. seats), `METER` is usage-tracked consumption (e.g. API calls).
+**Feature types.** `BOOLEAN` is an on/off flag, `CUSTOMIZABLE` is a setting
+the plan configures (e.g. 30 days of history retention), `METER` is
+usage-tracked consumption (e.g. API calls). Seats customers buy are a `METER`:
+only a meter can carry a per-unit price and take a quantity at checkout.
 The entitlement `details` shape you pass to `plan_entitlements_add` differs
 by type — check `kelviq:docs_read` on `product-catalog/entitlements` for the
 exact fields rather than guessing.

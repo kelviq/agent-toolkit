@@ -20,9 +20,12 @@ sandbox testing with `KELVIQ_ENV=sandbox`.
    unknown, ask the user rather than guessing; don't invent one. Keep the
    returned product **UUID**.
 2. `kelviq:feature_create` for each feature this plan gates. Pick
-   `featureType`: `BOOLEAN` (flag), `CUSTOMIZABLE` (numeric quantity, e.g.
-   seats), or `METER` (usage-tracked, e.g. API calls). Keep each returned
-   feature **UUID**.
+   `featureType`: `BOOLEAN` (flag), `CUSTOMIZABLE` (a setting the plan
+   configures, e.g. 30 days of history retention), or `METER` (usage-tracked,
+   e.g. API calls). Seats customers buy are a `METER`, not `CUSTOMIZABLE`:
+   only a meter can carry a per-unit price and take a quantity at checkout —
+   see `kelviq:docs_read` on `product-catalog/seat-based-pricing`. Keep each
+   returned feature **UUID**.
 3. `kelviq:plan_create` — pass the product **UUID** from step 1 as `product`
    (not the identifier). The plan lands in DRAFT: not visible, not
    purchasable, until published. Don't tell the user it's live yet.
