@@ -34,6 +34,11 @@ history in git, and promoting a catalog you've already tested in sandbox to
 production. For a one-off plan or a single price, the dashboard (or MCP for
 everything except prices) is simpler.
 
+The config file covers products, features and plans. Discount codes and
+webhook endpoints are not part of it — create those with the `kelviq:`
+discount and webhook tools (see the `setup-payments` skill), and don't try to
+express them in `kelviq.config.ts`.
+
 ## The loop
 
 1. `kelviq pull` — fetch the live catalog into `kelviq.config.ts`

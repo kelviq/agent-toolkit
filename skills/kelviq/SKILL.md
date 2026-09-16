@@ -59,12 +59,17 @@ all — use them to answer questions before any key is configured.
   `KELVIQ_ENV` before assuming the identifier is wrong.
 - **Confirm before anything hard to undo.** Restate intent and get explicit
   user confirmation before: archiving a product/feature/plan,
-  `kelviq:subscription_cancel`, `kelviq:plan_file_delete`, or a
+  `kelviq:subscription_cancel`, `kelviq:plan_file_delete`, `kelviq:discount_archive`,
+  `kelviq:webhook_endpoint_delete`, or a
   `kelviq:plan_publish` call that sets `updateFeatures` or `updatePricing`
   (these migrate existing customers).
 - **Never invent a tool.** Every `kelviq:<tool>` reference must exist in the
   live tool list. Prices and media have no write tools in MCP by design —
   see the concept model below.
+- **Keep secrets out of the conversation.** Webhook signing secrets are hidden
+  in tool results; don't pass `revealSecret: true` unless the user needs the
+  value. Apps read secrets from their env file — write them there with a
+  command that doesn't print them.
 
 ## Concept model
 
@@ -98,7 +103,7 @@ dashboard or through the CLI — see `pricing-as-code`.
 | If the task is about... | Go to |
 |---|---|
 | Products, features, plans, entitlements, publishing | `pricing-plans` |
-| Checkout, subscriptions, trials, the customer portal, upgrades | `setup-payments` |
+| Checkout, subscriptions, trials, the customer portal, upgrades, discount codes, webhooks | `setup-payments` |
 | Runtime feature gating, usage reporting, license keys | `usage-based-billing` |
 | Versioning the catalog in git, CI, promoting sandbox → production | `pricing-as-code` |
 | A guided, step-by-step build from nothing | prompt `setup_product` |
