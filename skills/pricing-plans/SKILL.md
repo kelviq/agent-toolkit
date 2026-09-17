@@ -17,20 +17,20 @@ sandbox testing with `KELVIQ_ENV=sandbox`.
 ## Golden path: build and publish a plan
 
 1. `kelviq:product_create` — required: `name`, `taxCode`. If the tax code is
-   unknown, ask the user rather than guessing; don't invent one. Keep the
-   returned product **UUID**.
+   unknown, ask the user rather than guessing; don't invent one. Note the
+   returned product `identifier`.
 2. `kelviq:feature_create` for each feature this plan gates. Pick
    `featureType`: `BOOLEAN` (flag), `CUSTOMIZABLE` (a setting the plan
    configures, e.g. 30 days of history retention), or `METER` (usage-tracked,
    e.g. API calls). Seats customers buy are a `METER`, not `CUSTOMIZABLE`:
    only a meter can carry a per-unit price and take a quantity at checkout —
-   see `kelviq:docs_read` on `product-catalog/seat-based-pricing`. Keep each
-   returned feature **UUID**.
-3. `kelviq:plan_create` — pass the product **UUID** from step 1 as `product`
-   (not the identifier). The plan lands in DRAFT: not visible, not
-   purchasable, until published. Don't tell the user it's live yet.
-4. `kelviq:plan_entitlements_add` — attach entitlements using the feature
-   **UUIDs** from step 2, e.g. `[{ feature: <uuid>, details: {...} }]`. The
+   see `kelviq:docs_read` on `product-catalog/seat-based-pricing`. Note each
+   returned feature `identifier`.
+3. `kelviq:plan_create` — pass the product from step 1 as `product`
+   (identifier or UUID, either works). The plan lands in DRAFT: not visible,
+   not purchasable, until published. Don't tell the user it's live yet.
+4. `kelviq:plan_entitlements_add` — attach entitlements by feature identifier
+   or UUID, e.g. `[{ feature: "api-calls", details: {...} }]`. The
    `details` shape depends on the feature's type — check
    `kelviq:docs_read` on `product-catalog/entitlements` if unsure rather than
    guessing the shape.

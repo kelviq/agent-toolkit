@@ -8,7 +8,7 @@
     {
       "name": "kelviq",
       "source": ".",
-      "description": "Kelviq for Claude: the Kelviq MCP server (56 typed API tools, searchable docs, guided prompts) plus skills that teach Claude the Kelviq monetization workflows — modeling pricing, selling plans, gating features, and managing pricing as code."
+      "description": "Kelviq for Claude: the Kelviq MCP server (57 typed API tools, searchable docs, guided prompts) plus skills that teach Claude the Kelviq monetization workflows — modeling pricing, selling plans, gating features, and managing pricing as code."
     }
   ]
 }

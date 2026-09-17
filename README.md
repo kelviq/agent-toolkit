@@ -63,7 +63,9 @@ Get keys at
 **Degraded no-key mode**: with no keys set, the docs tools (`docs_search`,
 `docs_read`) still work — Claude can answer Kelviq questions from the docs
 without any credentials. API tools return a clear `Configuration error`
-until a key is set.
+until a key is set. `connection_check` reports which environment the server
+targets and whether the server key works, without printing it — the first
+thing to run when a key or `KELVIQ_ENV` looks wrong.
 
 ## Local development
 

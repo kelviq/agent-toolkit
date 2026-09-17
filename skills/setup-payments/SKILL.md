@@ -26,8 +26,8 @@ an explicit "off-session charging is not enabled" error back. Reach for
 this org; otherwise default to checkout and treat `subscription_create` as
 the exception, not the norm.
 
-`checkout_create_session` required fields: `planIdentifier`, `successUrl`,
-`chargePeriod`. It also accepts `discountCode`, `metadata`, `trialPeriod`
+`checkout_create_session` required fields: `planIdentifier`, `successUrl`
+(an absolute URL — a relative path is rejected), `chargePeriod`. It also accepts `discountCode`, `metadata`, `trialPeriod`
 (overrides the plan's trial), `billingPeriodsEnabled` (e.g. `"MONTHLY,YEARLY"`)
 and `email` (pre-fill; add `lockEmail` to stop edits). If you pass a
 `customerId` but the email you give already belongs to an existing customer,
@@ -46,10 +46,18 @@ fresh `customerId` guarantees a fresh customer record.
 3. After they complete checkout, `kelviq:subscription_list` filtered by
    `customerId` confirms the subscription now exists.
 
-## Upgrading a customer off a free plan
+## Free plans: enrolling at signup, upgrading later
 
 Free plans are one-time charges (`chargePeriod: ONE_TIME`), not a recurring
-subscription. To move a customer from a free plan to a paid one, use
+subscription, and nothing is charged — so they are the one case where
+`kelviq:subscription_create` is the right tool rather than checkout. To put a
+new signup on the free plan: `kelviq:customer_create` with an **email**
+first, then `kelviq:subscription_create` with the plan identifier and
+`chargePeriod: "ONE_TIME"`. Doing it in the other order registers an
+email-less customer; the fix is `kelviq:customer_update` with the email. See
+`kelviq:docs_read` on `product-catalog/free-and-trials`.
+
+To move a customer from a free plan to a paid one, use
 `kelviq:checkout_create_session` — not `kelviq:subscription_update`, which
 does not handle this transition.
 
@@ -72,16 +80,24 @@ does not handle this transition.
 - **Customer portal link**: `kelviq:portal_session_create`, then use the
   response's **`signedPortalUrl`** — not `customerPortalUrl` alone, which
   does not authenticate the customer. The token expires; generate a fresh
-  session per request rather than reusing an old link.
+  session per request rather than reusing an old link. It returns **400**
+  until the customer exists in Kelviq with an email address — an unknown
+  `customerId`, or a record created without an email. That's a
+  precondition, not a server fault: create the customer
+  (`kelviq:customer_create`) or add the email (`kelviq:customer_update`),
+  then retry.
 
 ## Discount codes
 
 - `kelviq:discount_create` makes a code customers enter at checkout (or that
   you pre-apply with `discountCode`). `PERCENTAGE` needs `percentageOff`;
   `FIXED_AMOUNT` needs `amountOff` and `currency`. `code` is uppercase letters
-  and numbers. `duration` is `ONCE`, `REPEATING` (with `durationInMonths`,
-  which counts billing periods) or `FOREVER`; `appliesTo` limits it to a
-  product and some of its plans. Merchant of Record organizations only.
+  and numbers. `duration` is `ONCE`, `REPEATING` (with `durationInMonths`)
+  or `FOREVER`; `appliesTo` limits it to a product (identifier or UUID) and
+  some of its plans. Merchant of Record organizations only.
+- `durationInMonths` counts **billing cycles**, not calendar months: `3` on a
+  yearly plan is three years off. A "first 3 months" code belongs scoped to
+  the monthly plans via `appliesTo`.
 - Only `isActive` can change afterwards (`kelviq:discount_update`). Restate
   the code, amount, duration, limits and scope and get confirmation before
   creating. To change anything else, create a new code and disable the old one.
@@ -100,6 +116,9 @@ does not handle this transition.
 - `kelviq:webhook_endpoint_delete` stops deliveries immediately — confirm first.
 - Events not arriving? `kelviq:webhook_log_list` shows delivery attempts, status
   codes and retries from the last 30 days.
+- Event semantics worth getting right: `subscription.cancelled` fires when the
+  subscription actually ends, not when a cancellation is scheduled (that's a
+  `subscription.updated`); `invoice.payment_failed` is a failed renewal.
 
 ## Docs worth reading first
 

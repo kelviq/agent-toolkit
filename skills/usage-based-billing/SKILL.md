@@ -30,6 +30,12 @@ returns `featureType`, `hasAccess`, `usageLimit`, `currentUsage`, and
 whether `currentUsage` is under `usageLimit`) before letting an action
 through — don't infer access from the customer's plan name.
 
+`hasAccess: false` is also what you get for a customer Kelviq has never seen,
+or one with no subscription — it is not an error. If new signups are meant
+to start on a free plan, enrol them first (create the customer with an
+email, then `subscription_create` — see the `setup-payments` skill, or
+`kelviq:docs_read` on `product-catalog/free-and-trials`).
+
 If access looks wrong for a specific customer, don't guess — walk the
 `kelviq` hub skill's diagnose-customer flow (or invoke the `diagnose_customer`
 prompt) to compare their entitlements against what their plan actually
@@ -58,6 +64,12 @@ Lifecycle: `kelviq:license_activate` → `kelviq:license_validate` →
 - `license_validate` checks a key (optionally scoped to an instance) and
   returns `{ valid, code, detail }` plus the underlying license object.
 - `license_deactivate` frees up an activation slot for reuse.
+- Reading a customer's key server-side: it lives on their order (`GET
+  /orders/`, searchable by customer id or email) or their subscription
+  (`kelviq:subscription_list` filtered by customer) as
+  `license[].licenseKey`. A signed-in app activates on the customer's behalf
+  with that key instead of asking them to paste it — see `kelviq:docs_read`
+  on `product-catalog/license-keys`.
 
 ## Docs worth reading first
 

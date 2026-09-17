@@ -48,6 +48,10 @@ all — use them to answer questions before any key is configured.
 
 ## Ground rules
 
+- **Tools available.** Prefer the `kelviq:` MCP tools when they exist. When
+  only a terminal is available, prefer the Kelviq CLI (`npx -y @kelviq/cli`)
+  over hand-written HTTP calls. Fall back to the REST API only for something
+  neither covers.
 - **Docs first.** For any "how do I" or "what does X mean" question, call
   `kelviq:docs_search` then `kelviq:docs_read` before answering from memory.
   Docs stay current; your training data doesn't.
@@ -57,6 +61,10 @@ all — use them to answer questions before any key is configured.
   missing. "Not found" on a valid-looking identifier often means the key is
   scoped to the wrong environment (production vs. sandbox) — check
   `KELVIQ_ENV` before assuming the identifier is wrong.
+- **Check the connection before guessing.** When auth or the environment
+  looks wrong, call `kelviq:connection_check` first: it reports which
+  environment the server targets and whether the server key works, without
+  printing the key.
 - **Confirm before anything hard to undo.** Restate intent and get explicit
   user confirmation before: archiving a product/feature/plan,
   `kelviq:subscription_cancel`, `kelviq:plan_file_delete`, `kelviq:discount_archive`,
@@ -74,11 +82,11 @@ all — use them to answer questions before any key is configured.
 ## Concept model
 
 **Identifier vs. UUID.** Products, features, and plans each have a stable
-`identifier` slug and a UUID. Most read/update endpoints address plans by
-identifier, but `plan_create` needs the parent **product UUID**, and
-`plan_entitlements_add` needs **feature UUIDs** — not identifiers. If you only
-have an identifier, resolve the UUID first with the matching list/retrieve
-tool (`product_retrieve`, `feature_list`, …).
+`identifier` slug and a UUID. Tools accept either wherever they reference
+another object: `plan_create` takes the parent product as identifier or
+UUID, `plan_entitlements_add` takes features the same way, and
+`discount_create.appliesTo.product` too. Prefer the identifier — it's what
+the user knows and what `kelviq.config.ts` uses.
 
 **Feature types.** `BOOLEAN` is an on/off flag, `CUSTOMIZABLE` is a setting
 the plan configures (e.g. 30 days of history retention), `METER` is
