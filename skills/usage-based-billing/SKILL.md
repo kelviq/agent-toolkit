@@ -49,7 +49,10 @@ the same value again. `DELTA` increments by the given amount — retrying a
 DELTA call blindly (e.g. after a network timeout with an unclear outcome)
 double-counts usage. Before retrying a DELTA report, check whether the first
 call actually landed (e.g. via `entitlements_get`'s `currentUsage`) rather
-than firing it again on faith. When correcting a wrong counter, prefer `SET`
+than firing it again on faith — and allow for lag: `currentUsage` is served
+from the edge and can trail a report by a few tens of seconds, so a reading
+taken right after the report may not include it yet. Wait and read again
+before concluding it was lost. When correcting a wrong counter, prefer `SET`
 to an absolute value over a compensating `DELTA`.
 
 ## License keys
