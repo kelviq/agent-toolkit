@@ -3,12 +3,12 @@
   "owner": {
     "name": "Kelviq"
   },
-  "description": "Kelviq's Claude Code plugin marketplace: the Kelviq MCP server and skills for modeling pricing, selling plans, gating features, and managing pricing as code.",
+  "description": "Kelviq's Claude Code plugin marketplace: the Kelviq MCP server and skills for modeling pricing, selling plans, gating features, managing pricing as code, and migrating to Kelviq.",
   "plugins": [
     {
       "name": "kelviq",
       "source": ".",
-      "description": "Kelviq for Claude: the Kelviq MCP server (57 typed API tools, searchable docs, guided prompts) plus skills that teach Claude the Kelviq monetization workflows — modeling pricing, selling plans, gating features, and managing pricing as code."
+      "description": "Kelviq for Claude: the Kelviq MCP server (58 typed API tools, searchable docs, guided prompts) plus skills that teach Claude the Kelviq monetization workflows — modeling pricing, selling plans, gating features, managing pricing as code, and migrating an existing store and app to Kelviq."
     }
   ]
 }

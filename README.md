@@ -4,7 +4,8 @@
 sell plans through checkout and subscriptions, gate features with
 entitlements, and manage pricing as code. This repo ships the Kelviq MCP
 server bundle plus the Kelviq skills — Claude Code guidance for the
-monetization loop (model → sell → gate) and pricing-as-code.
+monetization loop (model → sell → gate), pricing-as-code, and moving an
+existing store and app over to Kelviq.
 
 ## Install — Claude Code
 
@@ -41,8 +42,9 @@ your agent.
 | `setup-payments` | Checkout, subscriptions, trials, customer portal, upgrades | `npx skills add kelviq/agent-toolkit --skill setup-payments` |
 | `usage-based-billing` | Entitlement checks, usage reporting, license keys | `npx skills add kelviq/agent-toolkit --skill usage-based-billing` |
 | `pricing-as-code` | The Kelviq CLI: pricing in git, pull → diff → promote | `npx skills add kelviq/agent-toolkit --skill pricing-as-code` |
+| `migrate-to-kelviq` | Move from another platform (Lemon Squeezy is supported): dry-run the store import, run it on approval, add Kelviq checkout, webhook, license and portal code | `npx skills add kelviq/agent-toolkit --skill migrate-to-kelviq` |
 
-On Claude Code, `/plugin install kelviq@kelviq` (above) installs all five at
+On Claude Code, `/plugin install kelviq@kelviq` (above) installs all six at
 once, bundled with the MCP server.
 
 ## Environment variables
@@ -56,6 +58,7 @@ reads these from your environment:
 | `KELVIQ_SERVER_API_KEY` | Required for server-scoped API tools (products, plans, customers, checkout, etc.) |
 | `KELVIQ_CLIENT_API_KEY` | Required only for `promotion_get` |
 | `KELVIQ_ENV` | `sandbox` (default) or `production`. Leave unset while building and testing; set to `production` only for live data |
+| `LEMONSQUEEZY_API_KEY` | Required only for `import_start` with the `lemon-squeezy` source. Read from the environment so the key never passes through the conversation |
 
 Get keys at
 [app.kelviq.com/settings/api-keys](https://app.kelviq.com/settings/api-keys).

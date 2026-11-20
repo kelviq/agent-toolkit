@@ -1,6 +1,6 @@
 ---
 name: kelviq
-description: Works with the Kelviq monetization platform (products, plans, checkout, subscriptions, entitlements, usage-based billing, pricing-as-code) via the kelviq MCP tools. Use when the user mentions Kelviq, or asks to set up billing, pricing, checkout, subscriptions, or feature gating, and no more specific Kelviq skill (pricing-plans, setup-payments, usage-based-billing, pricing-as-code) matches.
+description: Works with the Kelviq monetization platform (products, plans, checkout, subscriptions, entitlements, usage-based billing, pricing-as-code) via the kelviq MCP tools. Use when the user mentions Kelviq, or asks to set up billing, pricing, checkout, subscriptions, or feature gating, and no more specific Kelviq skill (pricing-plans, setup-payments, usage-based-billing, pricing-as-code, migrate-to-kelviq) matches.
 ---
 
 # Kelviq
@@ -12,7 +12,8 @@ gate**, plus a fourth axis, **pricing-as-code**, for teams that version their
 catalog in git instead of clicking through the dashboard.
 
 This hub carries the ground rules every Kelviq skill shares. It also routes
-to four task skills that go deep on one slice of the loop. Read this skill
+to five task skills: four that go deep on one slice of the loop, and one for
+moving an existing store and app over from another platform. Read this skill
 first; jump to a task skill once you know which slice you're in.
 
 ## Setup
@@ -30,7 +31,8 @@ other agent, or if `kelviq:` tools are unavailable, add it directly:
       "env": {
         "KELVIQ_SERVER_API_KEY": "${KELVIQ_SERVER_API_KEY}",
         "KELVIQ_CLIENT_API_KEY": "${KELVIQ_CLIENT_API_KEY}",
-        "KELVIQ_ENV": "sandbox"
+        "KELVIQ_ENV": "sandbox",
+        "LEMONSQUEEZY_API_KEY": "${LEMONSQUEEZY_API_KEY:-}"
       }
     }
   }
@@ -39,7 +41,9 @@ other agent, or if `kelviq:` tools are unavailable, add it directly:
 
 Get keys at `https://app.kelviq.com/settings/api-keys`. `KELVIQ_SERVER_API_KEY`
 covers nearly every tool; `KELVIQ_CLIENT_API_KEY` is only needed for
-`promotion_get`. The server uses **sandbox** unless `KELVIQ_ENV=production` —
+`promotion_get`, and `LEMONSQUEEZY_API_KEY` is only needed for imports
+(`import_start`) — leave it unset otherwise. The server uses **sandbox**
+unless `KELVIQ_ENV=production` —
 keep it that way while building and testing, and only switch (with production
 keys) when the user explicitly wants live data. Sandbox and production are
 fully separate: different data, different keys, a key only works against its
@@ -68,9 +72,11 @@ all — use them to answer questions before any key is configured.
 - **Confirm before anything hard to undo.** Restate intent and get explicit
   user confirmation before: archiving a product/feature/plan,
   `kelviq:subscription_cancel`, `kelviq:plan_file_delete`, `kelviq:discount_archive`,
-  `kelviq:webhook_endpoint_delete`, or a
+  `kelviq:webhook_endpoint_delete`, a
   `kelviq:plan_publish` call that sets `updateFeatures` or `updatePricing`
-  (these migrate existing customers).
+  (these migrate existing customers), or a `kelviq:import_start` call with
+  `dryRun: false` (a real store import, which publishes the imported plans
+  by default — see `migrate-to-kelviq`).
 - **Never invent a tool.** Every `kelviq:<tool>` reference must exist in the
   live tool list. Prices and media have no write tools in MCP by design —
   see the concept model below.
@@ -116,6 +122,7 @@ dashboard or through the CLI — see `pricing-as-code`.
 | Checkout, subscriptions, trials, the customer portal, upgrades, discount codes, webhooks | `setup-payments` |
 | Runtime feature gating, usage reporting, license keys | `usage-based-billing` |
 | Versioning the catalog in git, CI, promoting sandbox → production | `pricing-as-code` |
+| Moving an app or store over from another platform (Lemon Squeezy is supported), importing an existing store | `migrate-to-kelviq` |
 | A guided, step-by-step build from nothing | prompt `setup_product` |
 | A guided plan launch on an existing product | prompt `launch_plan` |
 | Debugging why a specific customer's access looks wrong | prompt `diagnose_customer`, or the mini-flow below |
